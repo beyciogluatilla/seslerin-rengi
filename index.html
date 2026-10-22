@@ -1,28 +1,25 @@
-<!DOCTYPE html>
+import zipfile
+
+html_content = '''<!DOCTYPE html>
 <html lang="tr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seslerin Rengi | 22 Ekim Dünya Kekemelik Farkındalık Günü</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        paper: '#FAF8F5',
-                        surface: '#F2EFE9',
-                        bordercolor: '#E6E2D8',
-                        charcoal: '#1C1917',
-                        muted: '#78716C',
-                        tealaccent: '#0F766E',
-                        tealhover: '#115E59',
-                        teallight: '#F0FDFA',
+                        darkbg: '#0F1115',
+                        darksurface: '#181B22',
+                        darkborder: '#2A2E39',
+                        accentteal: '#14B8A6',
+                        accenthover: '#0D9488',
                     },
                     fontFamily: {
                         serif: ['Newsreader', 'serif'],
@@ -32,95 +29,116 @@
             }
         }
     </script>
-    <!-- Favicon: Vektörel Dalga Logosu -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%230F766E'/><path d='M10 12v8M14 8v16M18 10v12M22 14v4' stroke='white' stroke-width='2.5' stroke-linecap='round'/></svg>">
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 25s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%2314B8A6'/><path d='M10 12v8M14 8v16M18 10v12M22 14v4' stroke='%230F1115' stroke-width='2.5' stroke-linecap='round'/></svg>">
 </head>
-<body class="bg-paper text-charcoal font-sans antialiased selection:bg-tealaccent selection:text-white">
+<body class="bg-darkbg text-gray-100 font-sans antialiased selection:bg-accentteal selection:text-darkbg">
 
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-50 bg-paper/90 backdrop-blur-md border-b border-bordercolor">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-darkbg/85 backdrop-blur-md border-b border-darkborder">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <!-- Vektörel Logo -->
             <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-tealaccent text-white flex items-center justify-center shadow-sm group-hover:bg-tealhover transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-xl bg-accentteal/10 border border-accentteal/30 text-accentteal flex items-center justify-center shadow-sm group-hover:bg-accentteal group-hover:text-darkbg transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m-4-10v4m8-6v8m-12-2v0m16 0v0"></path>
                     </svg>
                 </div>
                 <div>
-                    <span class="font-serif text-xl font-bold tracking-tight block">Seslerin Rengi</span>
-                    <span class="text-xs text-muted font-medium tracking-wide uppercase">22 Ekim Farkındalık</span>
+                    <span class="font-serif text-xl font-bold tracking-tight block text-white">Seslerin Rengi</span>
+                    <span class="text-[10px] text-accentteal font-semibold tracking-widest uppercase">22 Ekim Farkındalık</span>
                 </div>
             </a>
-
-            <!-- Nav Links -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
-                <a href="#hakkinda" class="hover:text-charcoal transition-colors">Hakkında</a>
-                <a href="#gercekler" class="hover:text-charcoal transition-colors">Bilimsel Gerçekler</a>
-                <a href="#iletisim" class="hover:text-charcoal transition-colors">İletişim Rehberi</a>
-                <a href="#destek" class="hover:text-charcoal transition-colors">Destek Ol</a>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="#hakkinda" class="hover:text-white transition-colors">Hakkında</a>
+                <a href="#gercekler" class="hover:text-white transition-colors">Bilimsel Gerçekler</a>
+                <a href="#iletisim" class="hover:text-white transition-colors">İletişim Rehberi</a>
             </nav>
-
-            <!-- CTA Button -->
-            <a href="#iletisim" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-charcoal text-paper text-sm font-medium hover:bg-tealaccent transition-colors">
+            <a href="#iletisim" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-accentteal text-darkbg text-sm font-bold hover:bg-accenthover transition-colors shadow-lg shadow-accentteal/10">
                 Doğru Yaklaşım
             </a>
         </div>
     </header>
 
+    <!-- Kayan Şerit (Marquee) -->
+    <div class="bg-darksurface border-y border-darkborder py-3 overflow-hidden whitespace-hidden select-none">
+        <div class="animate-marquee flex items-center gap-12 text-xs font-semibold tracking-widest uppercase text-gray-400">
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accentteal"></span> 22 Ekim Dünya Kekemelik Farkındalık Günü</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accentteal"></span> Kelimeler Takılabilir, Sesler Değerlidir</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accentteal"></span> Sabırla Dinle, Acele Ettirme</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accentteal"></span> 22 Ekim Dünya Kekemelik Farkındalık Günü</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accentteal"></span> Kelimeler Takılabilir, Sesler Değerlidir</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accentteal"></span> Sabırla Dinle, Acele Ettirme</span>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="py-20 md:py-28 border-b border-bordercolor bg-surface/40">
-        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+    <section class="py-20 md:py-28 relative overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accentteal/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10">
             <div class="md:col-span-7 space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teallight border border-tealaccent/20 text-tealaccent text-xs font-semibold tracking-wide uppercase">
-                    <span>22 Ekim Dünya Kekemelik Farkındalık Günü</span>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accentteal/10 border border-accentteal/20 text-accentteal text-xs font-semibold tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-accentteal animate-pulse"></span>
+                    <span>Uluslararası Farkındalık Hareketi</span>
                 </div>
-                <h1 class="font-serif text-4xl md:text-6xl font-normal leading-[1.15] text-charcoal">
-                    Kelimeler takılabilir, <br><span class="italic text-tealaccent font-medium">ama sesler hep değerlidir.</span>
+                <h1 class="font-serif text-4xl md:text-6xl font-normal leading-[1.15] text-white">
+                    Kelimeler takılabilir, <br><span class="italic text-accentteal font-medium">ama sesler hep değerlidir.</span>
                 </h1>
-                <p class="text-lg text-muted font-normal max-w-xl leading-relaxed">
+                <p class="text-lg text-gray-400 font-normal max-w-xl leading-relaxed">
                     Konuşma akışındaki farklılıklar bir eksiklik değil, insan sesinin doğal çeşitliliğidir. 22 Ekim'de kulak vermekten öte, gerçekten anlamaya davetlisiniz.
                 </p>
                 <div class="flex flex-wrap items-center gap-4 pt-2">
-                    <a href="#hakkinda" class="px-6 py-3 rounded-xl bg-tealaccent text-white font-medium hover:bg-tealhover transition-colors shadow-sm">
+                    <a href="#hakkinda" class="px-6 py-3.5 rounded-xl bg-accentteal text-darkbg font-bold hover:bg-accenthover transition-all shadow-lg shadow-accentteal/20">
                         Kampanyayı İncele
                     </a>
-                    <a href="#gercekler" class="px-6 py-3 rounded-xl border border-bordercolor bg-paper font-medium hover:bg-surface transition-colors">
+                    <a href="#gercekler" class="px-6 py-3.5 rounded-xl border border-darkborder bg-darksurface font-semibold hover:bg-darkborder transition-colors text-gray-300">
                         Mitler ve Gerçekler
                     </a>
                 </div>
             </div>
 
-            <!-- Sağ Taraf: Etkileşimli Ses / Akış Kartı -->
+            <!-- Sağ Taraf: Canlı Akustik Kartı -->
             <div class="md:col-span-5">
-                <div class="p-8 rounded-2xl bg-paper border border-bordercolor shadow-sm space-y-6">
-                    <div class="flex items-center justify-between border-b border-bordercolor pb-4">
-                        <span class="text-xs font-bold uppercase tracking-wider text-muted">Akustik Denge Simülatörü</span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-tealaccent animate-pulse"></span>
+                <div class="p-8 rounded-2xl bg-darksurface border border-darkborder shadow-xl space-y-6 relative group hover:border-accentteal/40 transition-all">
+                    <div class="flex items-center justify-between border-b border-darkborder pb-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Akustik Denge Simülatörü</span>
+                        <span class="px-2.5 py-1 rounded-md bg-accentteal/10 text-accentteal text-xs font-semibold">Canlı Akış</span>
                     </div>
                     <div>
-                        <h3 class="font-serif text-2xl font-medium mb-2">Sabırlı Dinleme Deneyimi</h3>
-                        <p class="text-sm text-muted leading-relaxed">
+                        <h3 class="font-serif text-2xl font-medium mb-2 text-white">Sabırlı Dinleme Deneyimi</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">
                             Kekemeliği olan bireyler için en büyük destek, cümlenin tamamlanması değil; yargılanmadan, acele ettirilmeden dinlenmektir.
                         </p>
                     </div>
-                    <!-- Ses Dalgaları Görseli -->
+                    <!-- Ses Dalgaları -->
                     <div class="space-y-3 pt-2">
-                        <div class="flex items-center gap-1.5 h-12 bg-surface p-2 rounded-lg justify-between">
-                            <span class="w-1.5 bg-tealaccent h-4 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-8 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-10 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-6 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-12 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-7 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-9 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-5 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-11 rounded-full"></span>
-                            <span class="w-1.5 bg-tealaccent h-7 rounded-full"></span>
+                        <div class="flex items-center gap-1.5 h-14 bg-darkbg p-3 rounded-xl justify-between border border-darkborder">
+                            <span class="w-1.5 bg-accentteal h-4 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-8 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-12 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-6 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-14 rounded-full animate-pulse"></span>
+                            <span class="w-1.5 bg-accentteal h-9 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-11 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-5 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-10 rounded-full"></span>
+                            <span class="w-1.5 bg-accentteal h-7 rounded-full"></span>
                         </div>
-                        <div class="flex justify-between text-xs text-muted px-1">
+                        <div class="flex justify-between text-xs text-gray-400 px-1 font-medium">
                             <span>Söz Kesmeden Dinleme</span>
-                            <span class="text-tealaccent font-medium">Doğal Akış</span>
+                            <span class="text-accentteal font-semibold">Doğal Akış</span>
                         </div>
                     </div>
                 </div>
@@ -129,57 +147,54 @@
     </section>
 
     <!-- Hakkında Section -->
-    <section id="hakkinda" class="py-24 border-b border-bordercolor">
+    <section id="hakkinda" class="py-24 border-t border-darkborder bg-darksurface/30">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
-                <div class="md:col-span-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-tealaccent block mb-3">01 / Amaç & Vizyon</span>
-                    <h2 class="font-serif text-3xl md:text-4xl font-normal leading-tight">Neden 22 Ekim?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                <div class="md:col-span-4 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-widest text-accentteal block">01 / Amaç & Vizyon</span>
+                    <h2 class="font-serif text-3xl md:text-4xl font-normal leading-tight text-white">Neden 22 Ekim?</h2>
                 </div>
-                <div class="md:col-span-8 space-y-6 text-muted text-lg leading-relaxed">
+                <div class="md:col-span-8 space-y-6 text-gray-400 text-lg leading-relaxed">
                     <p>
-                        Dünya Kekemelik Farkındalık Günü, ilk kez 1998 yılında uluslararası alanda ilan edilmiştir. Her yıl 22 Ekim'de, konuşmasında akıcısızlık yaşayan milyonlarca insanın yaşadığı zorluklara dikkat çekilir ve toplumsal farkındalık örüntüleri oluşturulur.
+                        Dünya Kekemelik Farkındalık Günü, ilk kez 1998 yılında uluslararası alanda ilan edilmiştir. Her yıl 22 Ekim'de, konuşmasında akıcısızlık yaşayan milyonlarca insanın yaşadığı zorluklara dikkat çekilir ve toplumsal farkındalık ağları örülür.
                     </p>
-                    <p class="text-charcoal font-medium">
-                        Amaç; kekemeliği bir zayıflık veya utanılacak bir durum olarak görmek yerine, konuşma çeşitliliğinin bir parçası olarak kabul edilmesini sağlamak ve iletişim bariyerlerini ortadan kaldırmaktır.
+                    <p class="text-gray-200 font-medium">
+                        Amaç; kekemeliği bir zayıflık veya utanılacak bir durum olarak görmek yerine, konuşma çeşitliliğinin doğal bir parçası olarak kabul edilmesini sağlamak ve iletişim bariyerlerini ortadan kaldırmaktır.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Bilimsel Gerçekler Section -->
-    <section id="gercekler" class="py-24 bg-surface/30 border-b border-bordercolor">
+    <!-- Bilimsel Gerçekler (Kayan / Grid Kartlar) -->
+    <section id="gercekler" class="py-24 border-t border-darkborder">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
-                <span class="text-xs font-bold uppercase tracking-widest text-tealaccent">02 / Doğru Bilinen Yanlışlar</span>
-                <h2 class="font-serif text-3xl md:text-4xl font-normal">Mitler ve Gerçekler</h2>
-                <p class="text-muted">Kekemelik hakkında toplumda yaygın olan yanlış inanışların bilimsel gerçekleri.</p>
+                <span class="text-xs font-bold uppercase tracking-widest text-accentteal">02 / Doğru Bilinen Yanlışlar</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-normal text-white">Mitler ve Gerçekler</h2>
+                <p class="text-gray-400">Kekemelik hakkında toplumda yaygın olan yanlış inanışların bilimsel karşılıkları.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Kart 1 -->
-                <div class="p-8 rounded-2xl bg-paper border border-bordercolor space-y-4">
-                    <span class="text-xs font-bold text-tealaccent uppercase tracking-wider block">Mit 01</span>
-                    <h3 class="font-serif text-xl font-medium">Kekemelik düşük zeka veya kaygıdan kaynaklanır.</h3>
-                    <p class="text-sm text-muted leading-relaxed">
-                        <strong class="text-charcoal font-medium">Gerçek:</strong> Kekemeliğin zeka seviyesiyle hiçbir bağı yoktur. Nörolojik ve genetik temellere dayanan karmaşık bir konuşma akışcılığı durumudur.
+                <div class="p-8 rounded-2xl bg-darksurface border border-darkborder space-y-4 hover:border-accentteal/50 transition-all group">
+                    <div class="w-10 h-10 rounded-xl bg-accentteal/10 flex items-center justify-center text-accentteal font-bold text-sm">01</div>
+                    <h3 class="font-serif text-xl font-medium text-white group-hover:text-accentteal transition-colors">Kekemelik düşük zeka veya kaygıdan kaynaklanır.</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        <strong class="text-gray-200 font-medium">Gerçek:</strong> Kekemeliğin zeka seviyesiyle hiçbir bağı yoktur. Nörolojik ve genetik temellere dayanan karmaşık bir konuşma akışcılığı durumudur.
                     </p>
                 </div>
-                <!-- Kart 2 -->
-                <div class="p-8 rounded-2xl bg-paper border border-bordercolor space-y-4">
-                    <span class="text-xs font-bold text-tealaccent uppercase tracking-wider block">Mit 02</span>
-                    <h3 class="font-serif text-xl font-medium">Konuşurken cümlesini tamamlamak ona yardımcı olur.</h3>
-                    <p class="text-sm text-muted leading-relaxed">
-                        <strong class="text-charcoal font-medium">Gerçek:</strong> Cümleyi tamamlamak aksine sabırsızlık göstergesidir ve birey üzerindeki baskıyı artırarak akıcısızlığı tetikleyebilir.
+                <div class="p-8 rounded-2xl bg-darksurface border border-darkborder space-y-4 hover:border-accentteal/50 transition-all group">
+                    <div class="w-10 h-10 rounded-xl bg-accentteal/10 flex items-center justify-center text-accentteal font-bold text-sm">02</div>
+                    <h3 class="font-serif text-xl font-medium text-white group-hover:text-accentteal transition-colors">Konuşurken cümlesini tamamlamak ona yardımcı olur.</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        <strong class="text-gray-200 font-medium">Gerçek:</strong> Cümleyi tamamlamak aksine sabırsızlık göstergesidir ve birey üzerindeki baskıyı artırarak akıcısızlığı tetikleyebilir.
                     </p>
                 </div>
-                <!-- Kart 3 -->
-                <div class="p-8 rounded-2xl bg-paper border border-bordercolor space-y-4">
-                    <span class="text-xs font-bold text-tealaccent uppercase tracking-wider block">Mit 03</span>
-                    <h3 class="font-serif text-xl font-medium">Heyecanlandığı için kekeliyor, sakinleşirse geçer.</h3>
-                    <p class="text-sm text-muted leading-relaxed">
-                        <strong class="text-charcoal font-medium">Gerçek:</strong> Heyecan kekemeliği artırabilir ancak temel sebebi değildir. Heyecanlanmasa bile kekemelik bireyin hayatında var olabilir.
+                <div class="p-8 rounded-2xl bg-darksurface border border-darkborder space-y-4 hover:border-accentteal/50 transition-all group">
+                    <div class="w-10 h-10 rounded-xl bg-accentteal/10 flex items-center justify-center text-accentteal font-bold text-sm">03</div>
+                    <h3 class="font-serif text-xl font-medium text-white group-hover:text-accentteal transition-colors">Heyecanlandığı için kekeliyor, sakinleşirse geçer.</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        <strong class="text-gray-200 font-medium">Gerçek:</strong> Heyecan kekemeliği artırabilir ancak temel sebebi değildir. Heyecanlanmasa bile kekemelik bireyin hayatında var olabilir.
                     </p>
                 </div>
             </div>
@@ -187,35 +202,35 @@
     </section>
 
     <!-- İletişim Rehberi Section -->
-    <section id="iletisim" class="py-24 border-b border-bordercolor">
+    <section id="iletisim" class="py-24 border-t border-darkborder bg-darksurface/30">
         <div class="max-w-6xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
                 <div class="md:col-span-5 space-y-6">
-                    <span class="text-xs font-bold uppercase tracking-widest text-tealaccent block">03 / İletişim Kuralları</span>
-                    <h2 class="font-serif text-3xl md:text-4xl font-normal leading-tight">Nasıl İletişim Kurmalıyız?</h2>
-                    <p class="text-muted leading-relaxed">
+                    <span class="text-xs font-bold uppercase tracking-widest text-accentteal block">03 / İletişim Kuralları</span>
+                    <h2 class="font-serif text-3xl md:text-4xl font-normal leading-tight text-white">Nasıl İletişim Kurmalıyız?</h2>
+                    <p class="text-gray-400 leading-relaxed">
                         Kekemeliği olan bir bireyle konuşurken dikkat edilecek birkaç küçük detay, iletişimi hem konforlu hem de samimi hale getirir.
                     </p>
-                    <ul class="space-y-3 text-sm font-medium text-charcoal">
+                    <ul class="space-y-3 text-sm font-medium text-gray-300">
                         <li class="flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-tealaccent"></span> Göz temasını kesmeden doğal şekilde dinleyin.
+                            <span class="w-2 h-2 rounded-full bg-accentteal"></span> Göz temasını kesmeden doğal şekilde dinleyin.
                         </li>
                         <li class="flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-tealaccent"></span> "Acele etme" veya "sakin ol" gibi uyarılardan kaçının.
+                            <span class="w-2 h-2 rounded-full bg-accentteal"></span> "Acele etme" veya "sakin ol" gibi uyarılardan kaçının.
                         </li>
                         <li class="flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-tealaccent"></span> Ne söyleyeceğini tahmin edip cümlesini bitirmeyin.
+                            <span class="w-2 h-2 rounded-full bg-accentteal"></span> Ne söyleyeceğini tahmin edip cümlesini bitirmeyin.
                         </li>
                     </ul>
                 </div>
-                <div class="md:col-span-7 bg-surface p-8 rounded-2xl border border-bordercolor space-y-6">
-                    <h3 class="font-serif text-2xl font-medium">Altın Kural: Sabır ve Varlık</h3>
-                    <p class="text-muted text-sm leading-relaxed">
+                <div class="md:col-span-7 bg-darksurface p-8 rounded-2xl border border-darkborder space-y-6">
+                    <h3 class="font-serif text-2xl font-medium text-white">Altın Kural: Sabır ve Varlık</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
                         Bir insan konuşurken kelimeler arasında durakladığında ona ihtiyacı olan zamanı tanımak en büyük saygı göstergesidir. Sesin ritmi herkes için farklı akabilir; önemli olan o sesin arkasındaki düşünceye kulak vermektir.
                     </p>
-                    <div class="p-4 rounded-xl bg-paper border border-bordercolor flex items-center justify-between">
-                        <span class="text-sm font-medium text-charcoal">Farkındalık Hareketi Destekçisi Ol</span>
-                        <span class="text-xs font-bold text-tealaccent bg-teallight px-3 py-1 rounded-full border border-tealaccent/20">22 Ekim</span>
+                    <div class="p-4 rounded-xl bg-darkbg border border-darkborder flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-300">Farkındalık Hareketi Destekçisi Ol</span>
+                        <span class="text-xs font-bold text-accentteal bg-accentteal/10 px-3 py-1 rounded-full border border-accentteal/20">22 Ekim</span>
                     </div>
                 </div>
             </div>
@@ -223,26 +238,27 @@
     </section>
 
     <!-- Footer -->
-    <footer id="destek" class="py-16 bg-surface/50 text-muted text-sm">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-bordercolor pt-12">
+    <footer class="py-16 border-t border-darkborder text-gray-500 text-sm">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-tealaccent text-white flex items-center justify-center">
+                <div class="w-8 h-8 rounded-lg bg-accentteal/10 text-accentteal flex items-center justify-center border border-accentteal/20">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m-4-10v4m8-6v8m-12-2v0m16 0v0"></path>
                     </svg>
                 </div>
-                <span class="font-serif font-bold text-charcoal text-base">Seslerin Rengi</span>
+                <span class="font-serif font-bold text-white text-base">Seslerin Rengi</span>
             </div>
             <p class="text-center md:text-left">
                 22 Ekim Dünya Kekemelik Farkındalık Günü Proje Çalışması. Tüm hakları saklıdır.
             </p>
             <div class="flex items-center gap-6">
-                <a href="#hakkinda" class="hover:text-charcoal transition-colors">Hakkında</a>
-                <a href="#gercekler" class="hover:text-charcoal transition-colors">Gerçekler</a>
-                <a href="#iletisim" class="hover:text-charcoal transition-colors">İletişim</a>
+                <a href="#hakkinda" class="hover:text-white transition-colors">Hakkında</a>
+                <a href="#gercekler" class="hover:text-white transition-colors">Gerçekler</a>
+                <a href="#iletisim" class="hover:text-white transition-colors">İletişim</a>
             </div>
         </div>
     </footer>
 
 </body>
 </html>
+'''
